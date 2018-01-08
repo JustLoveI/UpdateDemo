@@ -1,0 +1,21 @@
+﻿生成启动时间为 2018/1/5 17:52:47。
+     1>项目“D:\工作任务\代码收藏\UpdateDemo\UpdateDemo\UpdateDemo.vcxproj”在节点 2 上(Build 个目标)。
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\GdipButton /I..\HeadFileShared /I..\ListCtrl /Zi /nologo /W3 /WX- /sdl /Od /Oi /Oy- /GL /D WIN32 /D _WINDOWS /D NDEBUG /D _MBCS /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Release\UpdateDemo.pch" /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt UpdateDemoDlg.cpp
+         UpdateDemoDlg.cpp
+     1>UpdateDemoDlg.cpp(220): warning C4018: “<”: 有符号/无符号不匹配
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\工作任务\代码收藏\UpdateDemo\Release\UpdateDemo.exe" /INCREMENTAL:NO /NOLOGO /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /manifestinput:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\Include\Manifest\dpiaware.manifest" /DEBUG /PDB:"D:\工作任务\代码收藏\UpdateDemo\Release\UpdateDemo.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\工作任务\代码收藏\UpdateDemo\Release\UpdateDemo.lib" /MACHINE:X86 /SAFESEH Release\UpdateDemo.res
+         Release\GdipButton.obj
+         Release\HeadFileShared.obj
+         Release\stdafx.obj
+         Release\UpdateDemo.obj
+         Release\UpdateDemoDlg.obj
+         正在生成代码
+         已完成代码的生成
+         UpdateDemo.vcxproj -> D:\工作任务\代码收藏\UpdateDemo\Release\UpdateDemo.exe
+     1>已完成生成项目“D:\工作任务\代码收藏\UpdateDemo\UpdateDemo\UpdateDemo.vcxproj”(Build 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:03.17
