@@ -27,6 +27,9 @@ struct FileInfo
 	//文件最新修改时间 例
 	CString sFileChangeTime;
 
+	//文件大小
+	int nFileSize;
+
 	//文件版本			例   v1.0.1
 	CString sFileVersion;
 };
@@ -61,10 +64,14 @@ public:
 	CListCtrl m_listCtrl;
 	CGdipButton m_btn_finish;
 	CWinThread* pThreadCheckUpdate;
+	CString m_sServerUrl;
 
+	void InitSetting();
 	void InitStyle();
 
-	void FindFile(CString sPrePath, CString sFilePath, vector<FileInfo> &vec_File);
+	void FindFile(CString sPrePath, CString sPreUrl, CString sFilePath, vector<FileInfo> &vec_File);
+	void ReadIni(CString sIniPath, map<CString, FileInfo> &map_File);
+	void WriteIni(CString sIniPath, vector<FileInfo> &vec_File);
 
 	static UINT ThreadCheckUpdate(LPVOID pParam);
 	afx_msg void OnBnClickedButtonFinish();

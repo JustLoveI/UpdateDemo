@@ -100,6 +100,8 @@ BOOL CUpdateDemoDlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);			// 设置大图标
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
+	InitSetting();
+
 	InitStyle();
 
 	OutputLog("检测服务端文件是否有更新","UpdateLog.log");
@@ -158,6 +160,23 @@ HCURSOR CUpdateDemoDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
 }
+
+void CUpdateDemoDlg::InitSetting()
+{
+	CFileFind finder;   //查找是否存在ini文件，若不存在，则生成一个新的默认设置的ini文件，这样就保证了我们更改后的设置每次都可用
+	char RetURL[MAX_PATH];
+	BOOL bFind = finder.FindFile(".\\updatesetting.ini");
+	if (bFind)
+	{
+		::GetPrivateProfileString("ServerInfo", "url", "1", RetURL, MAX_PATH, ".\\updatesetting.ini");
+		m_sServerUrl = RetURL;
+	}
+	else
+	{
+		m_sServerUrl = "";
+	}
+}
+
 void CUpdateDemoDlg::InitStyle()
 {
 	//背景颜色
@@ -181,9 +200,10 @@ void CUpdateDemoDlg::InitStyle()
 	dwStyle |= LVS_EX_CHECKBOXES;//item前生成checkbox控件
 	m_listCtrl.SetExtendedStyle(dwStyle); //设置扩展风格
 	m_listCtrl.InsertColumn(0, "Index", LVCFMT_LEFT, 60);
-	m_listCtrl.InsertColumn(1, "NAME", LVCFMT_LEFT, 150);
-	m_listCtrl.InsertColumn(2, "TIME", LVCFMT_LEFT, 150);
-	m_listCtrl.InsertColumn(3, "VERSION", LVCFMT_LEFT, 150);
+	m_listCtrl.InsertColumn(1, "NAME", LVCFMT_LEFT, 250);
+	m_listCtrl.InsertColumn(2, "TIME", LVCFMT_LEFT, 100);
+	m_listCtrl.InsertColumn(3, "VERSION", LVCFMT_LEFT, 100);
+	m_listCtrl.InsertColumn(4, "UPDATE", LVCFMT_LEFT, 150);
 
 	
 }
@@ -216,21 +236,77 @@ UINT CUpdateDemoDlg::ThreadCheckUpdate(LPVOID pParam)
 
 	bool bExistUpdate = false;
 	vector<FileInfo> vec_CurrenFile;
-	pDlg->FindFile("", ".", vec_CurrenFile);
+	map<CString, FileInfo> map_OldFile;
+
+	//获取当前路径下所有文件的信息
+	vec_CurrenFile.clear();
+	pDlg->FindFile("", "",  ".", vec_CurrenFile);
+
+	//读取config.ini中以前的版本信息
+	map_OldFile.clear();
+	pDlg->ReadIni(".\\config.ini", map_OldFile);
+
+	//将当前所有文件信息与之前的config.ini进行比较
 	for (int i = 0; i < vec_CurrenFile.size(); i++)
 	{
-		int nRow = pDlg->m_listCtrl.InsertItem(0, "11");
-		pDlg->m_listCtrl.SetItemText(nRow, 0, ConvertToCString(i));
-		pDlg->m_listCtrl.SetItemText(nRow, 1, vec_CurrenFile[i].sFileName);
-		pDlg->m_listCtrl.SetItemText(nRow, 2, vec_CurrenFile[i].sFileChangeTime);
-		pDlg->m_listCtrl.SetItemText(nRow, 3, "v1.0.1");
+
+		//存在的话  对修改时间，文件大小比较，二者有一个不同，就向上提升版本
+		if (map_OldFile.count(vec_CurrenFile[i].sFileName))
+		{
+			if (map_OldFile[vec_CurrenFile[i].sFileName].nFileSize != vec_CurrenFile[i].nFileSize || map_OldFile[vec_CurrenFile[i].sFileName].sFileChangeTime != vec_CurrenFile[i].sFileChangeTime)
+			{
+				CString sPreVersion = map_OldFile[vec_CurrenFile[i].sFileName].sFileVersion;
+				CString sNewVersion = "";
+				int nIndex = -1;
+				nIndex = sPreVersion.ReverseFind('.');
+				sNewVersion = sPreVersion.Right(sPreVersion.GetLength() -  nIndex - 1);
+				sNewVersion = sPreVersion.Left(nIndex + 1) + ConvertToCString(atoi(sNewVersion) + 1);
+				vec_CurrenFile[i].sFileVersion = sNewVersion;
+
+				int nRow = pDlg->m_listCtrl.InsertItem(i, "11");
+				pDlg->m_listCtrl.SetItemText(nRow, 0, ConvertToCString(i));
+				pDlg->m_listCtrl.SetItemText(nRow, 1, vec_CurrenFile[i].sFileName);
+				pDlg->m_listCtrl.SetItemText(nRow, 2, vec_CurrenFile[i].sFileChangeTime);
+				pDlg->m_listCtrl.SetItemText(nRow, 3, vec_CurrenFile[i].sFileVersion);
+				pDlg->m_listCtrl.SetItemText(nRow, 4, "更新");
+				bExistUpdate = true;
+
+			}
+			else
+			{
+				vec_CurrenFile[i].sFileVersion = map_OldFile[vec_CurrenFile[i].sFileName].sFileVersion;
+				int nRow = pDlg->m_listCtrl.InsertItem(i, "11");
+				pDlg->m_listCtrl.SetItemText(nRow, 0, ConvertToCString(i));
+				pDlg->m_listCtrl.SetItemText(nRow, 1, vec_CurrenFile[i].sFileName);
+				pDlg->m_listCtrl.SetItemText(nRow, 2, vec_CurrenFile[i].sFileChangeTime);
+				pDlg->m_listCtrl.SetItemText(nRow, 3, vec_CurrenFile[i].sFileVersion);
+				pDlg->m_listCtrl.SetItemText(nRow, 4, "");
+				bExistUpdate = true;
+			}
+		}
+		else
+		{
+			vec_CurrenFile[i].sFileVersion = "v1.0.1";
+			int nRow = pDlg->m_listCtrl.InsertItem(i, "11");
+			pDlg->m_listCtrl.SetItemText(nRow, 0, ConvertToCString(i));
+			pDlg->m_listCtrl.SetItemText(nRow, 1, vec_CurrenFile[i].sFileName);
+			pDlg->m_listCtrl.SetItemText(nRow, 2, vec_CurrenFile[i].sFileChangeTime);
+			pDlg->m_listCtrl.SetItemText(nRow, 3, "v1.0.1");
+			pDlg->m_listCtrl.SetItemText(nRow, 4, "新增");
+			bExistUpdate = true;
+		}
+	}
+
+	if (bExistUpdate)
+	{
+		pDlg->WriteIni(".\\config.ini", vec_CurrenFile);
 	}
 
 	return bExistUpdate;
 }
 
 //递归查找
-void CUpdateDemoDlg::FindFile(CString sPrePath, CString sFilePath, vector<FileInfo> &vec_File)
+void CUpdateDemoDlg::FindFile(CString sPrePath, CString sPreUrl, CString sFilePath, vector<FileInfo> &vec_File)
 {
 	CFile file;
 	CFileStatus fileStatus;
@@ -249,9 +325,9 @@ void CUpdateDemoDlg::FindFile(CString sPrePath, CString sFilePath, vector<FileIn
 		if (ff.IsDirectory() && !ff.IsDots())
 		{
 			if (sPrePath != "")
-				FindFile(sPrePath + "\\" + name, FilePath, vec_File);
+				FindFile(sPrePath + "\\" + name, sPreUrl + name + "/", FilePath, vec_File);
 			else
-				FindFile(sPrePath + name, FilePath, vec_File);
+				FindFile(sPrePath + name, name + "/", FilePath, vec_File);
 		}
 
 		//不是文件夹，是文件
@@ -259,13 +335,85 @@ void CUpdateDemoDlg::FindFile(CString sPrePath, CString sFilePath, vector<FileIn
 		{
 			if (CFile::GetStatus(FilePath.GetBuffer(), fileStatus))
 			{
-				
-				fileInfo.sFileName = sPrePath + "\\" + name;
+				if (sPrePath != "")
+					fileInfo.sFileName = sPrePath + "\\" + name;
+				else
+					fileInfo.sFileName = name;
+
 				fileInfo.sFileChangeTime = fileStatus.m_mtime.Format("%Y%m%d %X");
+				fileInfo.nFileSize = fileStatus.m_size;
+				fileInfo.sFileURL = m_sServerUrl + sPreUrl + name;
 				vec_File.push_back(fileInfo);
 			}
 		}
 	}
 
 	ff.Close();
+}
+
+void CUpdateDemoDlg::ReadIni(CString sIniPath, map<CString, FileInfo> & map_File)
+{
+	CFileFind finder;   //查找是否存在ini文件，若不存在，则生成一个新的默认设置的ini文件，这样就保证了我们更改后的设置每次都可用  
+	BOOL bFind = finder.FindFile(sIniPath);
+	if (!bFind)
+	{
+
+	}
+	else
+	{
+		unsigned int index = 0;
+		int  RetIndex;
+		char RetFlNm[MAX_PATH];
+		char RetURL[MAX_PATH];
+		char RetModifyTm[MAX_PATH];
+		int RetSize = 0;
+		char RetVersion[MAX_PATH];
+		char buf[1024 * 100];  //100KB
+		FileInfo fileInfo;
+
+		::GetPrivateProfileSectionNamesA(buf, sizeof(buf), sIniPath.GetBuffer());
+		for (char *Name = buf; *Name != 0; Name += strlen(Name) + 1)
+		{
+
+			RetIndex = ::GetPrivateProfileIntA(Name, "Index", 1, sIniPath.GetBuffer());
+			::GetPrivateProfileString(Name, "Name", "1", RetFlNm, MAX_PATH, sIniPath.GetBuffer());
+			::GetPrivateProfileString(Name, "URL", "1", RetURL, MAX_PATH, sIniPath.GetBuffer());
+			::GetPrivateProfileString(Name, "ModifyTm", "1", RetModifyTm, MAX_PATH, sIniPath.GetBuffer());
+			RetSize = ::GetPrivateProfileInt(Name, "Size", 0, sIniPath.GetBuffer());
+			::GetPrivateProfileString(Name, "Version", "1", RetVersion, MAX_PATH, sIniPath.GetBuffer());
+			
+			//map中不存在当前文件，则插入到map中
+			if (!map_File.count(RetFlNm))
+			{
+				fileInfo.nIndex = RetIndex;
+				fileInfo.sFileName = RetFlNm;
+				fileInfo.sFileURL = RetURL;
+				fileInfo.sFileChangeTime = RetModifyTm;
+				fileInfo.nFileSize = RetSize;
+				fileInfo.sFileVersion = RetVersion;
+				map_File[RetFlNm] = fileInfo;
+			}
+		}
+	}
+}
+void CUpdateDemoDlg::WriteIni(CString sIniPath, vector<FileInfo> &vec_File)
+{
+	CFileFind finder;   //查找是否存在ini文件，若不存在，则生成一个新的默认设置的ini文件，这样就保证了我们更改后的设置每次都可用  
+	BOOL bFind = finder.FindFile(sIniPath);
+	if (bFind)
+	{
+		DeleteFile(sIniPath);
+	}
+
+	
+	for (int i = 0; i < vec_File.size(); i++)
+	{
+		CString Name = "FileSection" + ConvertToCString(i);
+		::WritePrivateProfileString(Name, "Index", ConvertToCString(i), sIniPath.GetBuffer());
+		::WritePrivateProfileString(Name, "Name",  vec_File[i].sFileName, sIniPath.GetBuffer());
+		::WritePrivateProfileString(Name, "URL",  vec_File[i].sFileURL, sIniPath.GetBuffer());
+		::WritePrivateProfileString(Name, "ModifyTm",  vec_File[i].sFileChangeTime, sIniPath.GetBuffer());
+		::WritePrivateProfileString(Name, "Size", ConvertToCString(vec_File[i].nFileSize), sIniPath.GetBuffer());
+		::WritePrivateProfileString(Name, "Version", vec_File[i].sFileVersion, sIniPath.GetBuffer());
+	}
 }

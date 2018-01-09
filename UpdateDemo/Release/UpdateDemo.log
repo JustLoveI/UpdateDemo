@@ -1,9 +1,36 @@
-﻿生成启动时间为 2018/1/5 17:52:47。
-     1>项目“D:\工作任务\代码收藏\UpdateDemo\UpdateDemo\UpdateDemo.vcxproj”在节点 2 上(Build 个目标)。
+﻿生成启动时间为 2018/1/8 17:41:09。
+     1>项目“D:\工作任务\代码收藏\UpdateDemo\UpdateDemo\UpdateDemo.vcxproj”在节点 2 上(Rebuild 个目标)。
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\GdipButton /I..\HeadFileShared /I..\ListCtrl /Zi /nologo /W3 /WX- /sdl /Od /Oi /Oy- /GL /D WIN32 /D _WINDOWS /D NDEBUG /D _MBCS /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Release\UpdateDemo.pch" /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt UpdateDemoDlg.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\GdipButton /I..\HeadFileShared /I..\ListCtrl /Zi /nologo /W3 /WX- /sdl /Od /Oi /Oy- /GL /D WIN32 /D _WINDOWS /D NDEBUG /D _MBCS /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yc"stdafx.h" /Fp"Release\UpdateDemo.pch" /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+         stdafx.cpp
+     1>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\atlmfc\include\afx.h(38): warning C4996: 'MBCS_Support_Deprecated_In_MFC': MBCS support in MFC is deprecated and may be removed in a future version of MFC.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\atlmfc\include\afx.h(33) : 参见“MBCS_Support_Deprecated_In_MFC”的声明
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\GdipButton /I..\HeadFileShared /I..\ListCtrl /Zi /nologo /W3 /WX- /sdl /Od /Oi /Oy- /GL /D WIN32 /D _WINDOWS /D NDEBUG /D _MBCS /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Release\UpdateDemo.pch" /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt GdipButton\GdipButton.cpp HeadFileShared\HeadFileShared.cpp UpdateDemo.cpp UpdateDemoDlg.cpp
+         GdipButton.cpp
+     1>GdipButton\GdipButton.cpp(243): warning C4244: “参数”: 从“int”转换到“Gdiplus::REAL”，可能丢失数据
+     1>GdipButton\GdipButton.cpp(269): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+     1>GdipButton\GdipButton.cpp(270): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+     1>GdipButton\GdipButton.cpp(274): warning C4244: “参数”: 从“int”转换到“Gdiplus::REAL”，可能丢失数据
+     1>GdipButton\GdipButton.cpp(328): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+     1>GdipButton\GdipButton.cpp(329): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+     1>GdipButton\GdipButton.cpp(332): warning C4244: “参数”: 从“int”转换到“Gdiplus::REAL”，可能丢失数据
+     1>GdipButton\GdipButton.cpp(441): warning C4244: “参数”: 从“int”转换到“Gdiplus::REAL”，可能丢失数据
+     1>GdipButton\GdipButton.cpp(467): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+     1>GdipButton\GdipButton.cpp(468): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+     1>GdipButton\GdipButton.cpp(472): warning C4244: “参数”: 从“int”转换到“Gdiplus::REAL”，可能丢失数据
+     1>GdipButton\GdipButton.cpp(526): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+     1>GdipButton\GdipButton.cpp(527): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+     1>GdipButton\GdipButton.cpp(530): warning C4244: “参数”: 从“int”转换到“Gdiplus::REAL”，可能丢失数据
+         HeadFileShared.cpp
+     1>HeadFileShared\HeadFileShared.cpp(1): warning C4627: “#include "HeadFileShared.h"”:  在查找预编译头使用时跳过
+                 将指令添加到“stdafx.h”或重新生成预编译头
+         UpdateDemo.cpp
          UpdateDemoDlg.cpp
-     1>UpdateDemoDlg.cpp(220): warning C4018: “<”: 有符号/无符号不匹配
+     1>UpdateDemoDlg.cpp(250): warning C4018: “<”: 有符号/无符号不匹配
+     1>UpdateDemoDlg.cpp(344): warning C4244: “=”: 从“ULONGLONG”转换到“int”，可能丢失数据
+     1>UpdateDemoDlg.cpp(409): warning C4018: “<”: 有符号/无符号不匹配
+       ResourceCompile:
+         C:\Program Files (x86)\Windows Kits\8.1\bin\x86\rc.exe /D NDEBUG /l"0x0804" /IRelease\ /nologo /fo"Release\UpdateDemo.res" UpdateDemo.rc 
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\工作任务\代码收藏\UpdateDemo\Release\UpdateDemo.exe" /INCREMENTAL:NO /NOLOGO /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /manifestinput:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\Include\Manifest\dpiaware.manifest" /DEBUG /PDB:"D:\工作任务\代码收藏\UpdateDemo\Release\UpdateDemo.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\工作任务\代码收藏\UpdateDemo\Release\UpdateDemo.lib" /MACHINE:X86 /SAFESEH Release\UpdateDemo.res
          Release\GdipButton.obj
@@ -14,8 +41,8 @@
          正在生成代码
          已完成代码的生成
          UpdateDemo.vcxproj -> D:\工作任务\代码收藏\UpdateDemo\Release\UpdateDemo.exe
-     1>已完成生成项目“D:\工作任务\代码收藏\UpdateDemo\UpdateDemo\UpdateDemo.vcxproj”(Build 个目标)的操作。
+     1>已完成生成项目“D:\工作任务\代码收藏\UpdateDemo\UpdateDemo\UpdateDemo.vcxproj”(Rebuild 个目标)的操作。
 
 生成成功。
 
-已用时间 00:00:03.17
+已用时间 00:00:05.38
